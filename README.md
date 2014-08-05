@@ -1,6 +1,6 @@
 # [gulp-mithril-components](https://github.com/eddyystop/gulp-mithril-components)
 
-Create easily customized, multiple views for Mithril components, using a template and mixins.
+Create easily customized, multiple views for Mithril components, using a renderer template and mixins.
 
 ## The problem 
 
@@ -10,11 +10,11 @@ which don't exist with customized components for your own or limited use.
 
 #### Styling
 
-Do you code specialized class names?
+Do you use your own customized class names?
 Devs using Bootstrap or Zurb Foundation might not be excited by that, 
 as they may have to use Less or Sass mixins to relate your component classes to the CSS framework's.
  
-Will you obtain the class names from the view's `options`?
+Will you obtain the class names from the renderer's `options`?
 Devs might not be excited to code these whenever a component is used.
 
 #### Structure
@@ -28,12 +28,12 @@ and this structure is not consistent between CSS frameworks.
 Bootstrap provides a **lot** of capability, most of it extensively documented,
 and some of it _creative_.
 Devs, if they are limited to a subset of these capabilities,
-would either have to limit themselves to the subset,
-or expand the components with customization.
+would either have to limit themselves to that,
+or to expand the components with customization.
 
 Should you decide to write components which do much of what Bootstrap allows,
 your options will mirror Bootstrap, only using your own notation.
-Who would enjoy that?
+Who would enjoy such duplication?
 
 #### Dev vs Web Designer
 
@@ -47,9 +47,10 @@ The dev writes the template for a component renderer.
 The web designer (or the dev) writes HTML mixins which, 
 when merged with the template, result in specific capabilities.
 
-### Example dropdown component
+### Example: dropdown component
 
-./controllers/DropdownCtrl.js
+
+`./controllers/DropdownCtrl.js`
 is the controller for all dropdown components.
 ```
 // options: <props> tabName() <event> onclickTab
@@ -59,7 +60,6 @@ mc.DropdownCtrl = function (options) {
   this._dropdownId = 0;
 
   this._onclickTab = function (name) {
-    console.log('onclickTab')
     this._isDropdownOpen = false;
     mc._comm.lastDropdownId = -1; // will force closed any open dropdowns
     if (typeof options.tabName === 'function') { options.tabName(name); }
@@ -67,7 +67,6 @@ mc.DropdownCtrl = function (options) {
   }.bind(this);
 
   this._onclickDropdown = function () {
-    console.log('onclickDropDown')
     this._isDropdownOpen = !this._isDropdownOpen;
     mc._comm.lastDropdownId = this._dropdownId = Date.now();
   }.bind(this);
@@ -78,11 +77,12 @@ mc.DropdownCtrl = function (options) {
 };
 ```
 
-./templates/dropdownTmpl.js
+`./templates/dropdownTmpl.js`
 is the template for the renderer for all dropdown components:
 ```
 // ctrl: <props> _isDropdownOpen, _dropdownId <events> _onclickTab, onClickDropdown
 // options: label, isDisabled, isActive, classes, dropdown[]
+// dropdown[]: <props> label, isActive, isDisabled, redirectTo <events> _onclickTab
 // classes: btn-default -primary -success -info -warning -danger -link
 // classes: btn-lg -sm -xs
 // classes: btn-block
@@ -146,7 +146,7 @@ mc.COMPONENT_NAME = function (ctrl, options) {
 };
 ```
 
-./components/btnDropdownList.html
+`./components/btnDropdownList.html`
 creates a component for Bootstrap button dropdowns.
 
 ```
@@ -163,7 +163,7 @@ creates a component for Bootstrap button dropdowns.
 <!--MIXIN menu -->
 ```
 
-The result is ./build/btnDropdownList.js
+The result is `./build/btnDropdownList.js`
 ```
 mc.btnDropdownList = function (ctrl, options) {
   options = options || {};
@@ -226,7 +226,7 @@ var app = {
 };
 ```
 
-The web designer can take a copy of ./components/btnDropdownList.html
+The web designer can take a copy of `./components/btnDropdownList.html`
 (which is a button dropdown)
 and modify it to create a split button dropup:
 ```
@@ -300,6 +300,10 @@ m("div", {class:'dropdown' + classMain() }, [
 ]
 <!--MIXIN menu -->
 ```
+
+#### See it live
+
+Most of these examples are should on the web page at `./public/btnDropdown.html`. 
 
 ## Usage
 
