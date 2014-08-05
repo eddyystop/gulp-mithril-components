@@ -1,0 +1,10 @@
+<!--js: ../templates/selectTmpl.js -->
+<!-- Bootstrap select, options provide list  -->
+<!--MIXIN mixin1 -->
+<select class="form-control" onchange={ ctrl.onchange }>
+  {/*% options.items.map(function (item) { %*/}
+  {/*% return %*/}<option disabled={item.disabled}>{ item.name }</option>{/*%;%*/}
+  {/*% }) %*/}
+</select>
+<!--MIXIN mixin2 -->
+<option disabled={ item.disabled }>{ item.name }</option>

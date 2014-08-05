@@ -1,0 +1,90 @@
+<!doctype html>
+<head>
+  <link href="./vendor/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<script src="./vendor/mithril.js"></script>
+<script src="./vendor/mcUtils.js"></script>
+<script src="../test/controllers/DropdownCtrl.js"></script>
+<script src="../test/build/btnDropdownCars.js"></script>
+<script src="../test/build/btnDropdownList.js"></script>
+<script src="../test/build/btnSplitDropdownList.js"></script>
+<script src="../test/build/btnSplitDropdownUpList.js"></script>
+<script src="../test/build/tabsDropdownList.js"></script>
+<script>
+  var app = {
+    controller: function () {
+      var ctrl = this;
+      this.dropdownCtrl = [];
+      this.activeTab = [];
+
+      for (var i = 0; i <= 4; i += 1) {
+        this.dropdownCtrl.push(
+          new mc.DropdownCtrl({ onclickTab: onclickTab.bind(this, i) })
+        );
+      }
+
+      function onclickTab (i, name) {
+        ctrl.activeTab[i] = name;
+        console.log('\n... dropdownCtrl' + i + '>onclickTab name=', name);
+      }
+    },
+
+    view: function (ctrl) {
+      var options0 = {
+          name: 'dropdown0',
+          label: 'Customized dropdown',
+          flavor: 'dropdown',
+          dropdown: [
+            {label: 'Featured car', type: 'header' },
+            {name: 'tesla', label: 'Tesla Model S'},
+            {name: 'hummer', label: 'Hummer', isDisabled: true },
+            {type: 'divider' },
+            {label: 'Approved cars', type: 'header' },
+            {name: 'prius plugin', label: 'Toyota Prius Plugin' },
+            {name: 'prius v', label: 'Toyota Prius v' },
+            {label: 'Exit bar', redirectTo: '/bar'}
+          ]},
+        options1 = mc.utils.extend({}, options0, {label: 'Button dropdown'}),
+        options2 = mc.utils.extend({}, options0, {label: 'Split button dropdown'}),
+        options3 = mc.utils.extend({}, options0, {label: 'Split button dropup'}),
+        options4 = mc.utils.extend({}, options0, {label: 'Tabs dropdown'});
+
+      return m('.container', [
+        mc.btnDropdownCars(ctrl.dropdownCtrl[0], options0),
+        m('p', 'selected tab is ' + ctrl.activeTab[0]),
+        mc.btnDropdownList(ctrl.dropdownCtrl[1], options1),
+        m('p', 'selected tab is ' + ctrl.activeTab[1]),
+        mc.btnSplitDropdownList(ctrl.dropdownCtrl[2], options2),
+        m('p', 'selected tab is ' + ctrl.activeTab[2]),
+        mc.btnSplitDropdownUpList(ctrl.dropdownCtrl[3], options3),
+        m('p', 'selected tab is ' + ctrl.activeTab[3]),
+        mc.tabsDropdownList(ctrl.dropdownCtrl[4], options4),
+        m('p', 'selected tab is ' + ctrl.activeTab[4])/*,
+
+        mc.Dropdown.view(ctrl.dropdownCtrl[10], options10),
+        m('p', 'selected tab is ' + ctrl.activeTab[10]),
+        mc.Dropdown.view(ctrl.dropdownCtrl[11], options11),
+        m('p', 'selected tab is ' + ctrl.activeTab[11]),
+        mc.Dropdown.view(ctrl.dropdownCtrl[12], options12),
+        m('p', 'selected tab is ' + ctrl.activeTab[12]),
+        mc.Dropdown.view(ctrl.dropdownCtrl[13], options13),
+        m('p', 'selected tab is ' + ctrl.activeTab[13])
+        */
+      ]);
+    }
+  };
+
+  var foo = {
+    controller: function () { },
+    view: function () {
+      return m('h1.col-md-offset-1.bg-warning', 'We have redirected to another route');
+    }
+  };
+
+  m.route(document.body, '/', {
+    '/': app,
+    '/:tab': foo
+  });
+</script>
+</body>

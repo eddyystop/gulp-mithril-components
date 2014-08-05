@@ -1,0 +1,11 @@
+<!--js: ../templates/dropdownTmpl.js -->
+<!-- Bootstrap tabs dropdown, options provide label and menu -->
+<!--MIXIN main -->
+<li class={'dropdown' + classMain() }>
+  <a class="dropdown-toggle" onclick={ ctrl._onclickDropdown }>
+    <span>{ options.label } </span>
+    <span class="caret"></span>
+  </a>
+  {/*% , displayMenuList() %*/}
+</li>
+<!--MIXIN menu -->

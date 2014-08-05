@@ -1,0 +1,38 @@
+{
+  "name": "gulp-mithril-components",
+  "version": "0.1.0",
+  "author": "John Szwaronek <JohnSz9999@gmail.com>",
+  "description": "Create easily customized, multiple views for Mithril components, using a template and mixins.",
+  "homepage": "http://github.com/eddyystop/gulp-mithril-components",
+  "main": "mithrilComponents.js",
+  "keywords": [
+    "mithril",
+    "msx",
+    "component",
+    "components",
+    "mixin",
+    "mixins",
+    "template",
+    "templates"
+  ],
+  "license": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/eddyystop/gulp-mithril-components/blob/master/LICENSE"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/eddyystop/gulp-mithril-components.git"
+  },
+  "dependencies": {
+    "gulp-util": "^2.2.14",
+    "through2": "^0.4.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.0",
+    "gulp-clean": "^0.3.1",
+    "gulp-msx-logic": "^0.1.0",
+    "jstransform": "^6.1.0 "
+  }
+}

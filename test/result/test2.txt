@@ -1,0 +1,22 @@
+/** @jsx m *///[html] listAjax.html [controller] ./components/listAjax.js */
+mc.listAjax = {
+  controller : function (options) {
+    options = options || {};
+    this.value = typeof options.option === 'function' ? options.option() : options.option;
+
+    this.onchange = function (e) {
+      this.value = e.target.options[e.target.selectedIndex].value;
+      if (typeof options.value === 'function') { options.value(this.value); }
+      if (options.onclickTab) { options.onclickTab(this.value); }
+      console.log('clicked', this.value);
+    }.bind(this);
+  },
+
+  view : function (ctrl, options) {
+    return m("select", {class:"form-control", onchange:ctrl.onchange}, [
+         options.items.map(function (item) { 
+           return m("option", [item.name])
+         }) 
+      ]);
+  }
+};
