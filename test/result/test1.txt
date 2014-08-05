@@ -1,7 +1,0 @@
-function abc (ctrl, options) {
-  return <select class="form-control" onchange={ctrl.onchange}>
-      { options.items.map(function (item) { }
-        { return }<option>{item.name}</option>
-      { }) }
-    </select>;
-}

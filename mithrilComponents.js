@@ -21,7 +21,7 @@ function include(options) {
     options.showFiles : (options.showFiles ? 'mithril-components:' : false);
   if (options.recursive === undefined) options.recursive = true;
 
-  return through.obj(function(file, enc, cb) {
+  return through.obj(function (file, enc, cb) {
     var self = this;
     var jsFile;
 
@@ -31,7 +31,7 @@ function include(options) {
     this.options = options;
     this.includes = {};
 
-    /*
+    /*todo enable caching
     if (options.cache) {
       var cachename = options.cache === true? 'default': options.cache;
       caches[cachename] = caches[cachename] || {
@@ -62,9 +62,9 @@ function include(options) {
     }
     */
 
-    var str = file.contents.toString();
-    str = makeComponent(str, this.id, [this.filepath]);
-    /*
+    //var str = file.contents.toString();
+    //str = makeComponent(str, this.id, [this.filepath]);
+
     try {
       var str = file.contents.toString();
       str = makeComponent(str, this.id, [this.filepath]);
@@ -72,7 +72,7 @@ function include(options) {
       this.emit('error', e);
       return cb();
     }
-    */
+
 
     file.contents =
       new Buffer(str);

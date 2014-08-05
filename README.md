@@ -64,12 +64,12 @@ which don't exist with customized components for your own or limited use.
 
 #### Styling
 
-Do you use your own customized class names?
+Will you use your own customized class names?
 Devs using Bootstrap or Zurb Foundation might not be excited by that, 
 as they may have to use Less or Sass mixins to relate your component classes to the CSS framework's.
  
 Will you obtain the class names from the renderer's `options`?
-Devs might not be excited to code these whenever a component is used.
+Devs might not be excited to code these extensive lists whenever a component is used.
 
 #### Structure
 
@@ -86,13 +86,16 @@ would either have to limit themselves to that,
 or to expand the components with customization.
 
 Should you decide to write components which do much of what Bootstrap allows,
-your options will mirror Bootstrap, only using your own notation.
+your options will mirror Bootstrap extensive scope, only using your own notation.
 Who would enjoy such duplication?
 
 #### Dev vs Web Designer
 
-Projects could be more productive if web designers could frequently customize components themselves. 
-React's experience suggests its unlikely web designers would like to modify `m()` calls.
+Projects involving multiple people might be more productive 
+if web designers could often customize components themselves,
+rather than always depending on devs. 
+[React's](http://facebook.github.io/react/docs/jsx-in-depth.html) 
+experience suggests its unlikely web designers would like to modify Mithril `m()` calls.
 They would prefer working in HTML.
 
 ## The solution
@@ -344,7 +347,7 @@ Here's a dropdown which uses no options when rendering:
 </ul>
 ```
 
-You may also use pure Mithril:
+You may also use just idiomatic Mithril:
 ```
 <!--js: ../templates/dropdownTmpl.js -->
 <!-- Bootstrap button dropdown, just Mithril -->
@@ -398,4 +401,4 @@ return INCLUDE('path/to/file.html:mixinName') // only that mixin
 ### With thanks to
 
 gulp-mithril-components builds on 
-[gulp-include-js](https://github.com/ng-vu/gulp-include-js).
+[ng-vu/gulp-include-js](https://github.com/ng-vu/gulp-include-js).
