@@ -2,7 +2,61 @@
 
 Create easily customized, multiple views for Mithril components, using a renderer template and mixins.
 
-## The problem 
+## Rudimentary usage
+
+The gulp task:
+```
+gulp.task('components', function() {
+  return gulp.src('./test/components/*.html')
+    .pipe( require('gulp-mithril-components')({ showFiles:true }))
+    .pipe( msxTransform ())
+    .pipe( require('gulp-msx-logic') ())
+    .pipe(gulp.dest('./test/build'))
+    .on('error', function(e) {
+      console.error(e.message + '\n  in ' + e.fileName);
+    });
+});
+```
+
+The renderer template `./templates/selectTmpl.js`
+```
+/** @jsx m *///[component] COMPONENT_NAME [template] ./templates/selectTmpl.js */
+mc.COMPONENT_NAME = {
+  view : function (ctrl, options) {
+    options = options || {};
+    return MIXIN('mixin1');
+  }
+}
+```
+
+The component definition `./components/selectList.html`
+```
+<!--js: ../templates/selectTmpl.js -->
+<!-- Bootstrap select, options provide list  -->
+<!--MIXIN mixin1 -->
+<select class="form-control" onchange={ ctrl.onchange }>
+  {/*% options.items.map(function (item) { %*/}
+  {/*% return %*/}<option disabled={item.disabled}>{ item.name }</option>{/*%;%*/}
+  {/*% }) %*/}
+</select>
+```
+
+The resulting code `./build/selectList.js`
+```
+/** @jsx m *///[component] selectList [template] ./templates/selectAjax.js */
+mc.selectList = {
+  view : function (ctrl, options) {
+    options = options || {};
+    return m("select", {class:"form-control", onchange: ctrl.onchange }, [
+      options.items.map(function (item) { 
+        return m("option", {disabled:item.disabled}, [ item.name ]);
+      }) 
+    ]);
+  }
+};
+```
+
+## The problem being addressed 
 
 There are design issues with generalized Mithril components,
 especially when they are targeted at CSS frameworks,
@@ -37,18 +91,22 @@ Who would enjoy such duplication?
 
 #### Dev vs Web Designer
 
-Projects could be more productive if web designers could customize components themselves. 
+Projects could be more productive if web designers could frequently customize components themselves. 
 React's experience suggests its unlikely web designers would like to modify `m()` calls.
 They would prefer working in HTML.
 
-## One approach to a solution
+## The solution
 
 The dev writes the template for a component renderer.
 The web designer (or the dev) writes HTML mixins which, 
 when merged with the template, result in specific capabilities.
 
-### Example: dropdown component
+This approach allows the web designer to change the styling and structure if needed.
+The web designer can create new versions of components,
+often without help from a dev.
+The web designer works in HTML.
 
+### Example: dropdown component
 
 `./controllers/DropdownCtrl.js`
 is the controller for all dropdown components.
@@ -303,13 +361,13 @@ m("div", {class:'dropdown' + classMain() }, [
 
 #### See it live
 
-Most of these examples are should on the web page at `./public/btnDropdown.html`. 
+Most of these examples appear on the web page at `./public/btnDropdown.html`. 
 
 ## Usage
 
 Include the following in your Gulp pipeline before the mxs transform:
 ```
-.pipe(require('gulp-mithril-components')({showFiles:true}))
+.pipe( require('gulp-mithril-components') ({ showFiles:true }))
 ```
 
 `showFiles` may be a string, true or false (default).
@@ -318,9 +376,9 @@ A complete Gulp task may look like:
 ```
 gulp.task('components', function() {
   return gulp.src('./test/components/*.html')
-    .pipe(mithrilComponents({showFiles:true}))
-    .pipe(msxTransform())
-    .pipe(msxLogic())
+    .pipe( require('gulp-mithril-components')({ showFiles:true }))
+    .pipe( msxTransform ())
+    .pipe( require('gulp-msx-logic') ())
     .pipe(gulp.dest('./test/build'))
     .on('error', function(e) {
       console.error(e.message + '\n  in ' + e.fileName);
@@ -330,10 +388,11 @@ gulp.task('components', function() {
 
 ## Additional capabilities
 
-The template may include portions of other files, and this is recursive.
+The .js template file, or the .html component file 
+may include portions of other files, and this is recursive.
 ```
-return INCLUDE('path/to/file.html')
-return INCLUDE('path/to/file.html:mixinName')
+return INCLUDE('path/to/file.html') // entire file
+return INCLUDE('path/to/file.html:mixinName') // only that mixin
 ```
 
 ### With thanks to
