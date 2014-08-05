@@ -2,7 +2,7 @@
   "name": "gulp-mithril-components",
   "version": "0.1.0",
   "author": "John Szwaronek <JohnSz9999@gmail.com>",
-  "description": "Create easily customized, multiple views for Mithril components, using a renderer template and mixins.",
+  "description": "Write multiple versions of a Mithril component in a DRY fashion, where each version does something different.",
   "homepage": "http://github.com/eddyystop/gulp-mithril-components",
   "main": "mithrilComponents.js",
   "keywords": [
