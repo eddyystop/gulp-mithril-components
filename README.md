@@ -2,11 +2,11 @@
 
 Create easily customized, multiple views for Mithril components, using a template and mixins.
 
-### The problem 
+## The problem 
 
-There are design issues involved in writing generalized Mithril components,
+There are design issues with generalized Mithril components,
 especially when they are targeted at CSS frameworks,
-which don't exist when writing customized components for your own, or limited use.
+which don't exist with customized components for your own or limited use.
 
 #### Styling
 
@@ -14,26 +14,26 @@ Do you code specialized class names?
 Devs using Bootstrap or Zurb Foundation might not be excited by that, 
 as they may have to use Less or Sass mixins to relate your component classes to the CSS framework's.
  
-Do you obtain the class names from the view's `options`?
+Will you obtain the class names from the view's `options`?
 Devs might not be excited to code these whenever a component is used.
 
 #### Structure
 
 CSS frameworks require specific nested tags to work properly.
-A `< div>` with one class name must have a child `< div>` with another,
+A `< div>` with a specific class name often requires a child `< div>` with another specific class name,
 and this structure is not consistent between CSS frameworks.
 
 #### Complexity
 
-Bootstrap provides a **lot** of flexibility, most of it extensively documented,
+Bootstrap provides a **lot** of capability, most of it extensively documented,
 and some of it _creative_.
 Devs, if they are limited to a subset of these capabilities,
 would either have to limit themselves to the subset,
-or expand the capabilities themselves.
+or expand the components with customization.
 
 Should you decide to write components which do much of what Bootstrap allows,
 your options will mirror Bootstrap, only using your own notation.
-What dev would enjoy this?
+Who would enjoy that?
 
 #### Dev vs Web Designer
 
@@ -41,13 +41,16 @@ Projects could be more productive if web designers could customize components th
 React's experience suggests its unlikely web designers would like to modify `m()` calls.
 They would prefer working in HTML.
 
-### Our approach to a solution
+## One approach to a solution
 
-We propose an approach where the dev writes the template for a component,
-and where the web designer writes HTML mixins which are merged with the template.
+The dev writes the template for a component renderer.
+The web designer (or the dev) writes HTML mixins which, 
+when merged with the template, result in specific capabilities.
+
+### Example dropdown component
 
 ./controllers/DropdownCtrl.js
-is the controller for all dropdown components:
+is the controller for all dropdown components.
 ```
 // options: <props> tabName() <event> onclickTab
 mc.DropdownCtrl = function (options) {
@@ -144,7 +147,8 @@ mc.COMPONENT_NAME = function (ctrl, options) {
 ```
 
 ./components/btnDropdownList.html
-creates a component for Bootstrap button dropdowns:
+creates a component for Bootstrap button dropdowns.
+
 ```
 <!--js: ../templates/dropdownTmpl.js -->
 <!-- Bootstrap button dropdown, options provide label and menu -->
@@ -154,12 +158,12 @@ creates a component for Bootstrap button dropdowns:
     <span>{ options.label } </span>
     <span class="caret"></span>
   </button>
-{/*% , displayMenuList() %*/}
+  {/*% , displayMenuList() %*/}
 </div>
 <!--MIXIN menu -->
 ```
 
-The result is ./cbuild/btnDropdownList.js
+The result is ./build/btnDropdownList.js
 ```
 mc.btnDropdownList = function (ctrl, options) {
   options = options || {};
@@ -186,49 +190,45 @@ mc.btnDropdownList = function (ctrl, options) {
       (options.isActive ? ' active' : '');
   }
 
-  function displayMenuList () {
-    if (!ctrl._isDropdownOpen) { return null; }
-
-    return m('ul.dropdown-menu' + (options.dropdown.alignRight ? '.dropdown-menu-right' : ''),
-      options.dropdown.map(function (menuItem) {
-
-        switch (menuItem.type) {
-          case 'divider':
-            return m('li.divider', {style:{margin: '6px 0px'}}, ''); // .divider's 9px is not visible; px in 0px req'd for tests
-          case 'header':
-            return m('li.dropdown-header', {tabindex: '-1'}, menuItem.label || menuItem.name);
-          default:
-            return viewTab(
-              mc.utils.extend({}, menuItem, { isActive: false, _onclickTab: ctrl._onclickTab })
-            );
-        }
-      })
-    );
-  }
-
-  function viewTab (ctrl) {
-    var href = '',
-      attr = {};
-
-    if (!ctrl.isDisabled) {
-      if (ctrl.redirectTo) {
-        href = '[href="' + ctrl.redirectTo + '"]';
-        attr = {config : m.route};
-      } else {
-        attr = {onclick : ctrl._onclickTab.bind(this, ctrl.name)};
-      }
-    }
-
-    return m('li' + (ctrl.isActive ? '.active' : '') + (ctrl.isDisabled ? '.disabled' : ''),
-      m('a' + href, attr, ctrl.label || ctrl.name || '')
-    );
-  }
+  ... The rest is the same as in the template ...
 };
 ```
 
-The web designer could take a copy of ./components/btnDropdownList.html
+The component may be used as follows:
+```
+var app = {
+    controller: function () {
+      this.tabName = m.prop('');
+      this.dropdownCtrl = new mc.DropdownCtrl({ tabName: this.tabName })
+    },
+    
+    view: function (ctrl) {
+      var options = {
+          name: 'dropdown0',
+          label: 'Button dropdown',
+          dropdown: [
+            {label: 'Featured car', type: 'header' },
+            {name: 'tesla', label: 'Tesla Model S'},
+            {name: 'hummer', label: 'Hummer', isDisabled: true },
+            {type: 'divider' },
+            {label: 'Approved cars', type: 'header' },
+            {name: 'prius plugin', label: 'Toyota Prius Plugin' },
+            {name: 'prius v', label: 'Toyota Prius v' },
+            {label: 'Exit bar', redirectTo: '/bar'}
+          ]
+      };
+    
+      return m('.container', [
+        mc.btnDropdownList(ctrl.dropdownCtrl, options),
+        m('p', 'selected tab is ' + ctrl.tabName)
+      ]);
+    }
+};
+```
+
+The web designer can take a copy of ./components/btnDropdownList.html
 (which is a button dropdown)
-and, using Bootstrap documentation, modify it to create a split button dropup:
+and modify it to create a split button dropup:
 ```
 <!--js: ../templates/dropdownTmpl.js -->
 <!-- Bootstrap split button dropup, options provide label and menu -->
@@ -239,15 +239,69 @@ and, using Bootstrap documentation, modify it to create a split button dropup:
     <span class="caret"></span>
     <span class="sr-only">Toggle dropdown</span>
   </button>
-{/*% , displayMenuList() %*/}
+  {/*% , displayMenuList() %*/}
 </div>
 <!--MIXIN menu --> 
 ```
 
-### Usage
+The above modification is straightforward for someone familiar with Bootstrap.
+The target HTML is also well documented in the Bootstrap docs.
 
+Here is the component for a dropdown tab as needed in a tabs control:
+```
+<!--js: ../templates/dropdownTmpl.js -->
+<!-- Bootstrap tabs dropdown, options provide label and menu -->
+<!--MIXIN main -->
+<li class={'dropdown' + classMain() }>
+  <a class="dropdown-toggle" onclick={ ctrl._onclickDropdown }>
+    <span>{ options.label } </span>
+    <span class="caret"></span>
+  </a>
+  {/*% , displayMenuList() %*/}
+</li>
+<!--MIXIN menu -->
+```
 
-### Usage
+Here's a dropdown which uses no options when rendering:
+```
+<!--js: ../templates/dropdownTmpl.js -->
+<!-- Bootstrap button dropdown, customized for cars -->
+<!--MIXIN main -->
+<div class={'dropdown' + classMain() }>
+  <button class="btn btn-primary dropdown-toggle" type="button" onclick={ ctrl._onclickDropdown }>
+    <span>Customized cars </span>
+    <span class="caret"></span>
+  </button>
+  {/*% , displayMenu() %*/}
+</div>
+<!--MIXIN menu -->
+<ul class="dropdown-menu">
+  <li class="dropdown-header" tabindex="-1">Featured car</li>
+  <li><a onclick={ ctrl._onclickTab.bind(this, 'tesla') }>Tesla Model S</a></li>
+  <li class="disabled"><a onclick={ ctrl._onclickTab.bind(this, ctrl.name) }>Hummer</a></li>
+  <li class="divider" style="margin: 6px 0px;"></li>
+  <li class="dropdown-header" tabindex="-1">Approved cars</li>
+  <li><a onclick={ ctrl._onclickTab.bind(ctrl, 'prius plugin') }>Toyota Prius Plugin</a></li>
+  <li><a onclick={ ctrl._onclickTab.bind(ctrl, 'prius v') }>Toyota Prius v</a></li>
+</ul>
+```
+
+You may also use pure Mithril:
+```
+<!--js: ../templates/dropdownTmpl.js -->
+<!-- Bootstrap button dropdown, just Mithril -->
+<!--MIXIN main -->
+m("div", {class:'dropdown' + classMain() }, [
+  m("button", {class:"btn btn-primary dropdown-toggle", type:"button", onclick: ctrl._onclickDropdown }, [
+    m("span", [ options.label,  " " ]),
+    m("span", {class:"caret"})
+  ])
+  , displayMenuList() 
+]
+<!--MIXIN menu -->
+```
+
+## Usage
 
 Include the following in your Gulp pipeline before the mxs transform:
 ```
@@ -256,7 +310,7 @@ Include the following in your Gulp pipeline before the mxs transform:
 
 `showFiles` may be a string, true or false (default).
 
-The complete Gulp task may look like:
+A complete Gulp task may look like:
 ```
 gulp.task('components', function() {
   return gulp.src('./test/components/*.html')
@@ -269,3 +323,16 @@ gulp.task('components', function() {
     });
 });
 ```
+
+## Additional capabilities
+
+The template may include portions of other files, and this is recursive.
+```
+return INCLUDE('path/to/file.html')
+return INCLUDE('path/to/file.html:mixinName')
+```
+
+### With thanks to
+
+gulp-mithril-components builds on 
+[gulp-include-js](https://github.com/ng-vu/gulp-include-js).
