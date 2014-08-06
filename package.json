@@ -2,7 +2,7 @@
   "name": "gulp-mithril-components",
   "version": "0.1.0",
   "author": "John Szwaronek <JohnSz9999@gmail.com>",
-  "description": "Write multiple versions of a Mithril component in a DRY fashion, where each version does something different.",
+  "description": "Create easily customized, multiple views for Mithril components, in a DRY fashion.",
   "homepage": "http://github.com/eddyystop/gulp-mithril-components",
   "main": "mithrilComponents.js",
   "keywords": [
@@ -13,7 +13,8 @@
     "mixin",
     "mixins",
     "template",
-    "templates"
+    "templates",
+    "bootstrap"
   ],
   "license": [
     {

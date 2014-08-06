@@ -1,6 +1,6 @@
 # [gulp-mithril-components](https://github.com/eddyystop/gulp-mithril-components)
 
-Write multiple versions of a Mithril component in a DRY fashion, where each version does something different.
+Create easily customized, multiple views for Mithril components, in a DRY fashion.
 
 ## Rudimentary usage
 
