@@ -1,6 +1,6 @@
 # [gulp-mithril-components](https://github.com/eddyystop/gulp-mithril-components)
 
-Create easily customized, multiple views for Mithril components, in a DRY fashion.
+Create easily customized (tags & styles), multiple views for Mithril components, in a DRY fashion.
 
 ## Rudimentary usage
 
