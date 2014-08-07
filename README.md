@@ -104,7 +104,7 @@ The dev writes the template for a component renderer.
 The web designer (or the dev) writes HTML mixins which, 
 when merged with the template, result in specific capabilities.
 
-This approach allows the web designer to change the styling and structure if needed.
+This approach allows the web designer to change the styling and even the structure if needed.
 The web designer can create new versions of components,
 often without help from a dev.
 The web designer works in HTML.
