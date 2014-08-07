@@ -16,6 +16,12 @@ mc.DropdownCtrl = function (options) {
     if (options.onclickTab) { options.onclickTab(name); }
   }.bind(this);
 
+  this.onclickList = function (e) {
+    console.log('_onclickList')
+    var name = e.target.getAttribute('data-name');
+    if (name) { this._onclickTab(name); }
+  }.bind(this);
+
   this._onclickDropdown = function () {
     console.log('onclickDropDown')
     this._isDropdownOpen = !this._isDropdownOpen;

@@ -3,6 +3,7 @@
 
 // ctrl: <props> _isDropdownOpen, _dropdownId <events> _onclickTab, onClickDropdown
 // options: label, isDisabled, isActive, classes, dropdown[]
+// dropdown[]: <props> label, isActive, isDisabled, redirectTo <events> _onclickTab
 // classes: btn-default -primary -success -info -warning -danger -link
 // classes: btn-lg -sm -xs
 // classes: btn-block

@@ -126,6 +126,12 @@ mc.DropdownCtrl = function (options) {
     if (typeof options.tabName === 'function') { options.tabName(name); }
     if (options.onclickTab) { options.onclickTab(name); }
   }.bind(this);
+  
+  this.onclickList = function (e) {
+    console.log('_onclickList')
+    var name = e.target.getAttribute('data-name');
+    if (name) { this._onclickTab(name); }
+  }.bind(this);
 
   this._onclickDropdown = function () {
     this._isDropdownOpen = !this._isDropdownOpen;
@@ -336,14 +342,14 @@ Here's a dropdown which uses no options when rendering:
   {/*% , displayMenu() %*/}
 </div>
 <!--MIXIN menu -->
-<ul class="dropdown-menu">
+<ul class="dropdown-menu" onclick={ ctrl.onclickList }>
   <li class="dropdown-header" tabindex="-1">Featured car</li>
-  <li><a onclick={ ctrl._onclickTab.bind(this, 'tesla') }>Tesla Model S</a></li>
-  <li class="disabled"><a onclick={ ctrl._onclickTab.bind(this, ctrl.name) }>Hummer</a></li>
+  <li><a data-name="tesla">Tesla Model S</a></li>
+  <li class="disabled"><a data-name="hummer">Hummer</a></li>
   <li class="divider" style="margin: 6px 0px;"></li>
   <li class="dropdown-header" tabindex="-1">Approved cars</li>
-  <li><a onclick={ ctrl._onclickTab.bind(ctrl, 'prius plugin') }>Toyota Prius Plugin</a></li>
-  <li><a onclick={ ctrl._onclickTab.bind(ctrl, 'prius v') }>Toyota Prius v</a></li>
+  <li><a data-name="prius plugin">Toyota Prius Plugin</a></li>
+  <li><a data-name="prius v">Toyota Prius v</a></li>
 </ul>
 ```
 

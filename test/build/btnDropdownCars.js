@@ -3,6 +3,7 @@
 
 // ctrl: <props> _isDropdownOpen, _dropdownId <events> _onclickTab, onClickDropdown
 // options: label, isDisabled, isActive, classes, dropdown[]
+// dropdown[]: <props> label, isActive, isDisabled, redirectTo <events> _onclickTab
 // classes: btn-default -primary -success -info -warning -danger -link
 // classes: btn-lg -sm -xs
 // classes: btn-block
@@ -22,14 +23,14 @@ mc.btnDropdownCars = function (ctrl, options) {
 ]);
 
   function displayMenu () {
-    return m("ul", {class:"dropdown-menu"}, [
+    return m("ul", {class:"dropdown-menu", onclick: ctrl.onclickList }, [
   m("li", {class:"dropdown-header", tabindex:"-1"}, ["Featured car"]),
-  m("li", [m("a", {onclick: ctrl._onclickTab.bind(this, 'tesla') }, ["Tesla Model S"])]),
-  m("li", {class:"disabled"}, [m("a", {onclick: ctrl._onclickTab.bind(this, ctrl.name) }, ["Hummer"])]),
+  m("li", [m("a", {'data-name':"tesla"}, ["Tesla Model S"])]),
+  m("li", {class:"disabled"}, [m("a", {'data-name':"hummer"}, ["Hummer"])]),
   m("li", {class:"divider", style:"margin: 6px 0px;"}),
   m("li", {class:"dropdown-header", tabindex:"-1"}, ["Approved cars"]),
-  m("li", [m("a", {onclick: ctrl._onclickTab.bind(ctrl, 'prius plugin') }, ["Toyota Prius Plugin"])]),
-  m("li", [m("a", {onclick: ctrl._onclickTab.bind(ctrl, 'prius v') }, ["Toyota Prius v"])])
+  m("li", [m("a", {'data-name':"prius plugin"}, ["Toyota Prius Plugin"])]),
+  m("li", [m("a", {'data-name':"prius v"}, ["Toyota Prius v"])])
 ]);
   }
 
